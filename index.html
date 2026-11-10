@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🌸 LUMINARA 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@400;700;900&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --beige: #FAF0E6;
+  --beige-dark: #E8D5B7;
+  --gold: #D4AF37;
+  --gold-light: #F5E6D3;
+  --burgundy: #722F37;
+  --burgundy-dark: #3A1218;
+  --text-dark: #3a2418;
+  --correct: #2E7D32;
+  --wrong: #C62828;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Tajawal','Amiri',serif;
+  background: linear-gradient(135deg, var(--beige) 0%, var(--gold-light) 50%, var(--beige-dark) 100%);
+  min-height:100vh;
+  color:var(--text-dark);
+  position:relative;
+  overflow-x:hidden;
+}
+
+body::before {
+  content:''; position:fixed; top:0; left:0; right:0; bottom:0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212,175,55,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(114,47,55,0.08) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+
+.page { 
+  display:none; min-height:100vh; position:relative; z-index:1; width:100%;
+  opacity:0; transition: opacity 0.6s ease;
+}
+.page.active { display:block; opacity:1; }
+
+/* ===== صفحة الترحيب (تصميم فاخر جديد) ===== */
+#welcomePage {
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  min-height:100vh; padding:20px; text-align:center;
+  background: radial-gradient(ellipse at center, #3A1218 0%, #1F0A0D 60%, #0F0507 100%);
+  position:relative; overflow:hidden;
+}
+#welcomePage.active { display:flex; }
+
+.minaret-container {
+  position: relative; width: 100px; height: 320px; margin-bottom: 30px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.minaret-base {
+  width: 50px; height: 140px;
+  background: linear-gradient(90deg, #8B6F47, #D4AF37, #8B6F47);
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0% 100%);
+  position: relative;
+}
+.minaret-base::before {
+  content: ''; position: absolute; top: 40%; left: -15%; width: 130%; height: 8px;
+  background: #D4AF37; box-shadow: 0 0 15px #D4AF37; border-radius: 2px;
+}
+.minaret-dome {
+  width: 36px; height: 36px;
+  background: radial-gradient(circle at 30% 30%, #FFF8E7, #D4AF37);
+  border-radius: 50% 50% 0 0; margin-bottom: -4px; position: relative; z-index: 2;
+}
+.minaret-crescent {
+  width: 18px; height: 18px; border-radius: 50%;
+  box-shadow: -3px 0 0 2px #FFD700; position: relative; top: 4px;
+  animation: glowCrescent 2.5s ease-in-out infinite alternate;
+}
+@keyframes glowCrescent {
+  from { box-shadow: -3px 0 0 2px #FFD700, 0 0 10px #FFD700; }
+  to { box-shadow: -3px 0 0 2px #FFD700, 0 0 30px #FFD700, 0 0 50px #FFA500; }
+}
+.minaret-glow {
+  position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, transparent 70%);
+  animation: pulseGlow 4s ease-in-out infinite; pointer-events: none;
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.8; transform: translateX(-50%) scale(1.3); }
+}
+
+.welcome-title {
+  font-family:'Playfair Display',serif; font-size: 42px; font-weight:900;
+  color:var(--gold); text-shadow: 0 0 20px rgba(212,175,55,0.4);
+  margin-bottom:10px; letter-spacing:4px;
+}
+.welcome-subtitle {
+  font-family:'Amiri',serif; font-size: 20px; color:var(--gold-light);
+  margin-bottom:40px; font-style:italic;
+}
+
+.start-btn {
+  background: linear-gradient(135deg, var(--burgundy) 0%, #8B3A42 50%, var(--burgundy) 100%);
+  color:var(--gold-light); border:2px solid var(--gold);
+  padding:18px 50px; font-size:20px; font-weight:700;
+  border-radius:50px; cursor:pointer; font-family:'Tajawal',sans-serif;
+  box-shadow: 0 5px 20px rgba(114,47,55,0.4);
+  transition: all 0.3s; position:relative; overflow:hidden;
+}
+.start-btn:active { transform:scale(0.97); }
+
+/* ===== صفحة الأسئلة ===== */
+#quizPage { padding: 0 0 100px; }
+.quiz-header {
+  position: sticky; top:0; z-index:100;
+  background: linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+  color:var(--gold-light); padding: 12px 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  border-bottom: 2px solid var(--gold);
+}
+.quiz-title {
+  font-family:'Amiri',serif; font-size:18px; text-align:center; margin-bottom:10px; color:var(--gold);
+}
+.stats-bar {
+  display:flex; justify-content:space-around;
+  background: rgba(0,0,0,0.2); border-radius:10px; padding:8px 5px; font-size:13px;
+}
+.stat { text-align:center; flex:1; }
+.stat-label { font-size:11px; opacity:0.8; display:block; }
+.stat-value { font-size:16px; font-weight:700; color:var(--gold); display:block; margin-top:2px; }
+
+.question-card {
+  background: #FFFFFF; border-right: 5px solid var(--gold);
+  border-radius: 12px; padding: 18px 15px; margin: 15px;
+  box-shadow: 0 3px 10px rgba(114,47,55,0.1);
+  transition: all 0.3s;
+}
+.question-card.answered-correct {
+  border-right-color: var(--correct);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F1F8E9 100%);
+}
+.question-card.answered-wrong {
+  border-right-color: var(--wrong);
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFEBEE 100%);
+}
+.q-number {
+  display:inline-block; background: linear-gradient(135deg, var(--gold), #B8941F);
+  color:var(--text-dark); width:30px; height:30px; border-radius:50%;
+  text-align:center; line-height:30px; font-weight:700; font-size:14px; margin-left:10px;
+}
+.q-text { display:inline; font-size:15px; font-weight:700; color:var(--text-dark); line-height:1.7; }
+
+.options-list { list-style:none; margin-top:12px; }
+.option {
+  background: var(--beige); border: 2px solid var(--beige-dark);
+  border-radius: 10px; padding: 12px 15px; margin-bottom: 8px;
+  cursor: pointer; font-size: 14px; color: var(--text-dark);
+  transition: all 0.2s; position:relative;
+}
+.option:active { transform:scale(0.98); }
+.option.correct {
+  background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+  border-color: var(--correct); color:#1B5E20; font-weight:700;
+}
+.option.wrong {
+  background: linear-gradient(135deg, #FFCDD2, #EF9A9A);
+  border-color: var(--wrong); color:#B71C1C;
+}
+.option.disabled { pointer-events:none; opacity:0.85; }
+
+@keyframes shake {
+  0%,100%{transform:translateX(0);}
+  10%,30%,50%,70%,90%{transform:translateX(-5px);}
+  20%,40%,60%,80%{transform:translateX(5px);}
+}
+.shake { animation: shake 0.5s ease-in-out; }
+
+/* تأثير الاحتفال المنظم والأنيق */
+.celebration {
+  position:fixed; top:0; left:0; right:0; bottom:0;
+  pointer-events:none; z-index:500; overflow:hidden;
+}
+.celebration-column {
+  position: absolute; top: -50px; width: 16%;
+  display: flex; flex-direction: column; align-items: center;
+  animation: elegantFall 4s linear forwards;
+}
+.celebration-item {
+  font-size: 24px; /* حجم موحد تماماً */
+  margin: 20px 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+@keyframes elegantFall {
+  0% { transform: translateY(-50px); opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+.results-btn {
+  display:block; margin: 30px auto;
+  background: linear-gradient(135deg, var(--gold) 0%, #B8941F 100%);
+  color:var(--text-dark); border:none;
+  padding: 18px 40px; font-size:18px; font-weight:700;
+  border-radius:50px; cursor:pointer; font-family:'Tajawal',sans-serif;
+  box-shadow: 0 5px 20px rgba(212,175,55,0.4);
+  transition: all 0.3s;
+}
+.results-btn:active { transform:translateY(-1px); }
+
+/* ===== صفحة النتائج ===== */
+#resultsPage { padding: 30px 20px 100px; text-align:center; }
+.results-circle {
+  width:200px; height:200px; margin: 30px auto; border-radius:50%;
+  background: conic-gradient(var(--gold) var(--p,0%), var(--beige-dark) 0%);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; box-shadow: 0 10px 30px rgba(114,47,55,0.2);
+}
+.results-circle::before {
+  content:''; position:absolute; width:170px; height:170px; border-radius:50%; background:var(--beige);
+}
+.results-score {
+  position:relative; z-index:1; font-family:'Playfair Display',serif;
+  font-size:48px; font-weight:900; color:var(--burgundy);
+}
+.results-message {
+  font-family:'Amiri',serif; font-size:22px; color:var(--text-dark);
+  margin: 20px 0; line-height:1.8; padding: 0 10px;
+}
+.results-details {
+  background:#FFFFFF; border-radius:15px; padding:20px; margin: 20px 0;
+  border:2px solid var(--gold);
+}
+.detail-row {
+  display:flex; justify-content:space-between; padding:12px 0;
+  border-bottom:1px dashed var(--beige-dark); font-size:16px;
+}
+.detail-row:last-child { border-bottom:none; }
+.detail-label { color:var(--burgundy); font-weight:700; }
+.detail-value { color:var(--text-dark); font-weight:700; }
+
+.signature {
+  position:fixed; bottom:0; left:0; right:0;
+  background: linear-gradient(135deg, var(--burgundy), var(--burgundy-dark));
+  color:var(--gold); text-align:center; padding: 12px;
+  font-family:'Playfair Display',serif; font-size:16px; font-weight:700;
+  border-top: 2px solid var(--gold); z-index:150; letter-spacing:2px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
+}
+</style>
+</head>
+<body>
+
+<!-- صفحة الترحيب -->
+<div id="welcomePage" class="page active">
+  <div class="minaret-container">
+    <div class="minaret-glow"></div>
+    <div class="minaret-crescent"></div>
+    <div class="minaret-dome"></div>
+    <div class="minaret-base"></div>
+  </div>
+  <div class="welcome-title">LUMINARA</div>
+  <div class="welcome-subtitle">✦ منصة التميز التعليمي ✦</div>
+  <button class="start-btn" onclick="startJourney()">✦ ابدأ الرحلة ✦</button>
+  <div class="signature">إعداد الــ 🌸 LUMINARA 🌸</div>
+</div>
+
+<!-- صفحة الأسئلة -->
+<div id="quizPage" class="page">
+  <div class="quiz-header">
+    <div class="quiz-title">اختبار شامل</div>
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-label">المتبقية</span><span class="stat-value" id="statRemaining">0</span></div>
+      <div class="stat"><span class="stat-label">✓ الصح</span><span class="stat-value" id="statCorrect">0</span></div>
+      <div class="stat"><span class="stat-label">✗ الخطأ</span><span class="stat-value" id="statWrong">0</span></div>
+    </div>
+  </div>
+  <div id="questionsContainer"></div>
+  <button class="results-btn" id="resultsBtn" style="display:none;" onclick="showResults()">✦ اضغط لرؤية النتائج ✦</button>
+  <div class="signature">إعداد الــ 🌸 LUMINARA 🌸</div>
+</div>
+
+<!-- صفحة النتائج -->
+<div id="resultsPage" class="page">
+  <div class="page-header" style="text-align:center; padding: 20px 10px 10px;">
+    <h1 style="font-family:'Playfair Display',serif; color:var(--burgundy); font-size:28px;">🏆 النتائج</h1>
+    <div style="color:var(--gold); font-size:20px; letter-spacing:10px;">✦ ❖ ✦</div>
+  </div>
+  <div class="results-circle" id="resultsCircle">
+    <div class="results-score" id="resultsScore">0%</div>
+  </div>
+  <div class="results-message" id="resultsMessage"></div>
+  <div class="results-details">
+    <div class="detail-row"><span class="detail-label">إجمالي الأسئلة</span><span class="detail-value" id="resTotal">0</span></div>
+    <div class="detail-row"><span class="detail-label">الإجابات الصحيحة</span><span class="detail-value" id="resCorrect">0</span></div>
+    <div class="detail-row"><span class="detail-label">الإجابات الخاطئة</span><span class="detail-value" id="resWrong">0</span></div>
+    <div class="detail-row"><span class="detail-label">النسبة المئوية</span><span class="detail-value" id="resPercent">0%</span></div>
+  </div>
+  <button class="results-btn" onclick="resetQuiz()" style="background:linear-gradient(135deg,var(--burgundy),var(--burgundy-dark)); color:var(--gold); border:2px solid var(--gold);">↩ العودة للبداية</button>
+  <div class="signature">إعداد الــ 🌸 LUMINARA 🌸</div>
+</div>
+
+<div class="celebration" id="celebration"></div>
+
+<script>
+// ========== بيانات الأسئلة الكاملة (77 سؤالاً) ==========
+const allQuestions = [
+  {q: "A nurse in the emergency department activates the stroke protocol and obtains ECG for a patient with chest pain before a physician has seen them. Which specific standard of practice?", options: ["The ENA standard for rapid, focused assessments", "The ENA standard for initiation of protocols and guidelines", "The AACN standard for Implementation", "The AACN standard for Assessment"], answer: 1},
+  {q: "A nurse receives a patient who has just been intubated due to sudden severe respiratory arrest. The nurse notes that no formal written consent for the intubation was obtained. Which statement best explains the legal justification for this procedure?", options: ["The intubation is considered an invasive procedure, therefore it should not have been performed without a surrogate’s consent, regardless of the emergency", "Endotracheal intubation is a life-saving procedure, and consent is implicitly waived when the patient lacks decision-making capacity and no surrogate is available in an emergent situation", "The physician is solely responsible for obtaining consent in emergencies", "Verbal consent from the Emergency Department charge nurse is sufficient"], answer: 1},
+  {q: "During the primary survey, the nurse establishes a patent airway, confirms adequate breathing. During the secondary survey, the patient breathing becomes shallow. What is the nurse’s most appropriate priority action at this moment?", options: ["Continue to identify all significant medical history and allergies to complete the secondary survey", "Immediately document the change in findings in the medical record before proceeding", "Stop the secondary survey and return to the primary survey, re-establishing a patent airway and providing adequate ventilation", "Protect and clean the patient’s wounds"], answer: 2},
+  {q: "Which of the following conditions would be classified as Level 1: Resuscitation on the Canadian Triage and Acuity Scale (CTAS)?", options: ["Severe shock", "Any pain greater than 7 on a scale of 10", "Alert head injury with vomiting", "GI bleed with unstable vital signs"], answer: 0},
+  {q: "A triage nurse is assessing a patient involved in a mass-casualty incident using the START system. The patient is breathing at 22 breaths/min, has a strong radial pulse, but is disoriented and cannot follow simple commands. What triage tag color should be assigned?", options: ["Yellow (Delayed)", "Green (Minor)", "Black", "Red (Immediate)"], answer: 3},
+  {q: "A victim under the START triage system fails to follow a simple command. What should you do next?", options: ["Open their airway", "Tag immediate and treat for shock", "Count respirations for 15 seconds", "Control their bleeding"], answer: 0},
+  {q: "Walked wounded victim in start triage tagged as:", options: ["Red colored tag", "Green colored tag", "Yellow colored tag", "Black colored tag"], answer: 1},
+  {q: "While triaging the wounded from a disaster, you note that one of wounded is breathing, radial pulse is present, capillary refill more than 2 seconds. What color tag is assigned?", options: ["Green", "Red", "Yellow", "Black"], answer: 2},
+  {q: "Based on the Canadian Triage and Acuity Scale (CTAS), a 60-year-old patient presenting to the Emergency Department with new onset abdominal pain would most likely be classified as:", options: ["Triage Level I (Resuscitation)", "Triage Level II (Emergent); TIPA: ≤15 minutes", "Triage Level III (Urgent)", "Triage Level IV (Less Urgent)"], answer: 1},
+  {q: "The primary purpose of the Simple Triage and Rapid Treatment (START) System used in a Mass-Casualty Incident (MCI) is to:", options: ["Provide complete and definitive treatment on the scene", "Prioritize victims' treatment needs quickly based on respiratory, perfusion, and mental status observations", "Determine the exact diagnosis and long-term prognosis", "Label patients only for administrative and legal purposes"], answer: 1},
+  {q: "A patient is brought to the emergency department by emergency medical services (EMS) after being hit by a car. The name of the patient is unknown, and the client has sustained a severe head injury and multiple fractures & is unconscious. An emergency craniotomy is required, which is the best action regarding informed consent for the surgical procedure?", options: ["Obtain a court order for the surgical procedure", "Ask the EMS team to sign the informed consent", "Transport the victim to the operating room for surgery", "Call the police to identify the client and locate the family"], answer: 2},
+  {q: "An 87-year-old woman is brought to the emergency department for treatment of a fractured arm. On assessment, the nurse notes old and new ecchymotic areas on the client's chest and legs and asks the client how the bruises were sustained. The client, although reluctant, tells the nurse in confidence that her son frequently hits her. What is the most appropriate nursing response?", options: ["\"I will discuss this situation with your son\"", "\"Let's talk about the ways you can manage your time to prevent this from happening\"", "\"Do you have any friends that can help you out until you resolve these important issues with your son?\"", "\"As a nurse, I am legally bound to report abuse. I will stay with you while you give the report and help find a safe place for you to stay\""], answer: 3},
+  {q: "The nurse is obligated to follow a physician's order unless:", options: ["The order is a verbal order", "The order has not been transcribed", "The order is illegible", "The order is an error, violates hospital policy, or would be detrimental to client"], answer: 3},
+  {q: "The right to decide about future medical care, especially regarding life-sustaining treatments should the patient lose decision-making capacity, is covered under the right to:", options: ["Respectful Care", "Right to Safety", "Right to Privacy and Confidentiality", "Right to Advance Directives"], answer: 3},
+  {q: "You are a nurse in a smaller ICU (Level III). Your patient is getting much worse and needs specialized care. What should you do?", options: ["Keep them there; the unit can handle it.", "Stabilize them and prepare to move them to a major medical center (Level I) immediately.", "Ask specialist surgeons to travel to your hospital to operate.", "Keep monitoring them with basic tools and wait for them to improve."], answer: 1},
+  {q: "A patient who has been stabilized following multi-organ failure. They no longer require advanced respiratory support but still require a 2:1 nurse-to-patient ratio. This patient is transitioning into:", options: ["Level III", "Level II", "Level 1", "Level 0"], answer: 1},
+  {q: "When a nurse initiates an intervention to prevent complications before they occur, which standard of practice are they maintain?", options: ["Rehabilitative care", "Interdisciplinary collaboration and preventive intervention", "Outcome identification only", "Palliative standard"], answer: 1},
+  {q: "A logical consequence of informed consent is the right to refuse treatment.", options: ["True", "False"], answer: 0},
+  {q: "A patient with blunt chest trauma presents with paradoxical chest wall movement during breathing. This condition is characterized as:", options: ["Flail chest", "Simple pneumothorax", "Tension pneumothorax", "Pulmonary embolism"], answer: 0},
+  {q: "The nurse identifies a flail chest in a trauma patient when:", options: ["Bluish discoloration on the chest wall", "Tracheal deviation to the unaffected side", "Paradoxical chest movement during respiration", "Increased deep breathing"], answer: 2},
+  {q: "The immediate intervention for flail chest includes:", options: ["Stabilizing the flail rib segment with light, loose dressings", "Stabilizing the flail rib segment with bulky dressings and tape", "Inserting a chest tube", "Blood transfusion"], answer: 1},
+  {q: "What is the Priority Management for a Patient Diagnosed with Flail Chest?", options: ["Adequate pain control and oxygen support", "Strict bed rest only", "High-dose diuretics", "Immediate chest tube insertion"], answer: 0},
+  {q: "Immediate management of tension pneumothorax:", options: ["Needle decompression", "Antibiotics", "Oxygen only", "Chest physiotherapy"], answer: 0},
+  {q: "What is the Recommended Site for Needle Decompression in Tension Pneumothorax?", options: ["2nd intercostal space, midclavicular line", "5th intercostal space, midaxillary line", "3rd intercostal space, parasternal line", "6th intercostal space, posteriorly"], answer: 0},
+  {q: "What is the Correct Chest Tube Insertion Site for Pneumothorax?", options: ["1st intercostal space, midline", "2nd intercostal space, midclavicular line", "5th intercostal space, midaxillary line", "4th intercostal space, sternum"], answer: 1},
+  {q: "What is the Correct Chest Tube Insertion Site for Hemothorax?", options: ["5th intercostal space, midaxillary line", "3rd intercostal space, parasternal line", "2nd intercostal space, midclavicular line", "6th intercostal space, posterior scapular line"], answer: 0},
+  {q: "A person with massive hemothorax may show signs of:", options: ["Increased blood pressure and rapid heart rate", "Hypovolemic shock due to massive blood loss", "Hyperventilation and increased oxygen saturation", "Absence of any chest pain"], answer: 1},
+  {q: "A 32-year-old male is brought to the emergency department after a road traffic accident, with restless, dyspnea and severe chest pain. On examination, he has decreased breath sounds on the right side, distended neck veins, and worsening respiratory distress. If you suggest the diagnosis is tension pneumothorax, what is the key sign of tension pneumothorax?", options: ["Bradycardia", "Normal breathing", "Tracheal deviation", "Hypertension"], answer: 2},
+  {q: "The most life-threatening chest injury is:", options: ["Simple pneumothorax", "Tension pneumothorax", "Chest wall bruise", "Rib fracture"], answer: 1},
+  {q: "Patient is diagnosed with a primary spontaneous pneumothorax. Which of following is NOT a correct statement about this type of pneumothorax?", options: ["It can be caused by the rupture of a pulmonary bleb", "It can occur in patients who are young, tall and thin without a history of lung disease", "Smoking increases the chances of a patient developing a spontaneous pneumothorax", "It is most likely to occur in patients with COPD, asthma, and cystic fibrosis"], answer: 3},
+  {q: "Which of the following best describes the mechanism of Blunt Trauma Compared to Penetrating Trauma?", options: ["Blunt trauma causes injury through compression, deceleration, and shearing forces without breaking the skin", "Penetrating trauma does not cause internal organ damage", "Blunt trauma involves tissue damage through direct penetration of skin and organs", "Penetrating trauma causes injury mainly through compression and deceleration forces"], answer: 0},
+  {q: "Flail chest occurs when two or more ribs are fractured in two or more places, leading to paradoxical motion of the chest wall.", options: ["True", "False"], answer: 0},
+  {q: "Patient presented with attacks of substernal chest pain that increase in frequency and severity and are not relieved by rest and administering nitroglycerin. Troponin is negative. The patient’s diagnosis:", options: ["Unstable angina", "Heart attack", "Stable angina", "Pericarditis"], answer: 0},
+  {q: "As it regards to the previous situation, what is the nurse’s highest priority in the immediate plan?", options: ["Administering intravenous diuretics for volume control", "Drawing a complete set of laboratory tests including lipid panel", "Ensuring the patient remains calm, and promptly administering prescribed anti-ischemic medications", "Preparing the patient for immediate cardiac catheterization"], answer: 2},
+  {q: "A key role of the nurse in managing a patient receiving thrombolytic therapy for STEMI is:", options: ["Monitoring the PTT every 2 hours until the therapy is complete", "Administering IM pain medications to avoid oral intake", "Monitoring for signs of bleeding from all invasive sites and changes in neurological status", "Ensuring the patient performs passive range of motion exercises every hour"], answer: 2},
+  {q: "According to the modifiable risk factors for Coronary Heart Disease (CHD), a patient is considered to be at a higher risk if their blood levels of Low-Density Lipoprotein (LDL) cholesterol are:", options: ["Below 40 mg/dL", "Higher than 100 mg/dL", "Lower than 60 mg/dL", "Between 80–99 mg/dL"], answer: 1},
+  {q: "A critical care nurse is caring for a patient with a nursing diagnosis of Acute Pain related to myocardial infarction. When administering IV Morphine Sulfate, the priority monitoring action for the nurse is to:", options: ["Document the pain level 30 minutes post-administration", "Assess the patient’s respiratory rate and lung sounds every 4 hours", "Continuously monitor for hypotension and signs of respiratory depression", "Administer a repeat dose if the patient remains tachycardic"], answer: 2},
+  {q: "“Ineffective cardiopulmonary tissue perfusion” is directly related to reduced coronary blood flow. Which of the following is an associated manifestation of this nursing diagnosis?", options: ["Bradycardia", "Polyuria", "Nausea and vomiting", "Hypothermia"], answer: 2},
+  {q: "Once atherosclerosis narrows the coronary arteries, the decreased blood flow initially may cause which warning symptom?", options: ["Heart failure (pulmonary edema)", "Hypotension", "Chest pain (angina)", "Complete blockage (heart attack)"], answer: 2},
+  {q: "A patient with STEMI is receiving initial emergency management following the MONA protocol. Which medication decreases myocardial oxygen demand by reducing left ventricular preload?", options: ["Metoprolol", "Aspirin", "Nitroglycerin", "Morphine sulfate"], answer: 2},
+  {q: "For a patient with STEMI, goals of reperfusion include giving fibrinolytics or performing PCI within a certain timeframe of the patient's arrival in the ED. What are these time parameters?", options: ["Fibrinolytics within 15 minutes, PCI within 30 minutes", "Fibrinolytics within 90 minutes, PCI within 30 minutes", "Fibrinolytics within 20 minutes, PCI within 60 minutes", "Fibrinolytics within 30 minutes, PCI within 90 minutes"], answer: 3},
+  {q: "To validate that the client has had ST-segment elevation myocardial infarction (STEMI), which of the following tests should the nurse assess for positive findings?", options: ["Creatine kinase-MB fraction (CK-MB) and alkaline phosphatase", "Homocysteine and C-reactive protein", "Total cholesterol, low-density lipoprotein (LDL)", "Creatine kinase-MB fraction (CK-MB) and troponin"], answer: 3},
+  {q: "A patient with diabetes will be started on a beta-blocker (Metoprolol) for medical management of acute coronary syndrome. Which of the following should be included in the discharge plan?", options: ["Check heart rate regularly because Metoprolol can cause an irregular heart rate", "Check blood glucose regularly because this medication can cause hyperglycemia", "Check blood pressure regularly because this medication can cause hypertension", "Check blood glucose regularly because this medication can mask the typical signs and symptoms of hypoglycemia"], answer: 3},
+  {q: "The nurse is administering beta blocker to the patient diagnosed with a myocardial infarction. Which assessment data would cause the nurse to stop administering this medication?", options: ["The patient's apical pulse is below 60 b/min", "The patient's calcium level is elevated", "The patient's calcium level is decreased", "Respiratory rate 20 breath/min"], answer: 0},
+  {q: "Patients present with STEMI within 12 hours of symptom onset. The physician ordered emergency reperfusion for this patient to restore the coronary arterial flow within:", options: ["Two hours", "Six hours", "Four hours", "One hour"], answer: 0},
+  {q: "A patient reports having crushing chest pain that radiates to the jaw. The nurse administers sublingual nitroglycerin and obtains a 12 lead EKG. Which of the following confirms nurse's suspicion of a possible subendocardial myocardial infarction?", options: ["ST segment depression with positive troponin", "QRS widening", "Absent P wave", "ST segment elevation"], answer: 0},
+  {q: "Which of the following is categorized as a non-modifiable risk factor for ACS?", options: ["Family History", "Lipid levels (LDL > 130 mg/dL)", "Diabetes Mellitus", "Smoking status"], answer: 0},
+  {q: "STEMI is characterized by:", options: ["ST-segment elevation in 2 or more contiguous leads OR new LBBB", "Ischemic ST-segment depression greater than or equal to 0.5mm OR dynamic T-wave inversion with pain or discomfort", "Nondiagnostic changes in the ST segment or T-wave", "Nonpersistent/transient ST elevation greater than or equal to 0.5mm for less than 20 minutes"], answer: 0},
+  {q: "Acute Coronary Syndrome (ACS) is an umbrella term for a group of clinical symptoms primarily caused by:", options: ["Chronic hypertension leading to ventricular hypertrophy", "Partial or complete occlusion of a coronary artery due to ruptured atherosclerotic plaque", "Direct trauma to the heart muscle (myocardium)", "Autoimmune inflammation of the pericardial sac"], answer: 1},
+  {q: "The SA node and AV node receive their blood supply primarily from the:", options: ["Left circumflex artery", "Right coronary artery", "Left main coronary artery", "Left anterior descending artery"], answer: 1},
+  {q: "The specific condition within the Acute Coronary Syndrome (ACS) umbrella is characterized by transmural necrosis is NSTEMI.", options: ["True", "False"], answer: 1},
+  {q: "A patient with ACS exhibits cool, clammy, and diaphoretic skin. The underlying physiological reason for these skin manifestations is parasympathetic activation.", options: ["True", "False"], answer: 1},
+  {q: "The nursing diagnosis of Decreased Cardiac Output is primarily concerned with maximizing oxygen supply and reducing demand.", options: ["True", "False"], answer: 0},
+  {q: "NSTEMI and STEMI are characterized by positive/elevated cardiac biomarkers, but they are differentiated by the presence of ST-segment elevation.", options: ["True", "False"], answer: 0},
+  {q: "Patients with STEMI should receive emergency reperfusion within two hours to restore the coronary arterial flow.", options: ["True", "False"], answer: 0},
+  {q: "A dysrhythmia may occur within the first 48 hours following an infarct and may be life-threatening.", options: ["True", "False"], answer: 0},
+  {q: "If a patient experiences a complete Right Coronary Artery (RCA) occlusion leading to a myocardial infarction, the nurse should be most alert for atrioventricular (AV) heart blocks.", options: ["True", "False"], answer: 0},
+  {q: "The primary cause of acidosis in DKA is:", options: ["Electrolyte imbalance only", "Glucose breakdown", "Protein synthesis", "Fat breakdown producing ketones"], answer: 3},
+  {q: "A key respiratory sign of DKA is:", options: ["Kussmaul respirations", "Apnea", "Slow breathing", "Shallow breathing"], answer: 0},
+  {q: "Fruity breath odor in DKA is due to:", options: ["Dehydration", "Infection", "Ketones", "Insulin excess"], answer: 2},
+  {q: "The priority initial management in DKA is:", options: ["IV fluid resuscitation", "Antibiotics", "Oxygen therapy", "Insulin injection"], answer: 0},
+  {q: "Which electrolyte requires close monitoring in DKA?", options: ["Magnesium", "Calcium", "Potassium", "Sodium"], answer: 2},
+  {q: "A 30-year-old patient with type 1 diabetes is brought to the emergency department with nausea, vomiting, and abdominal pain. He reports missing insulin doses for the past 2 days. His ABGs show: pH= 7.12, HCO3= 9 mEq/L, PCO2= 22 mm Hg. Which respiratory pattern is most likely to be observed?", options: ["Shallow respirations due to CNS depression", "Slow, irregular respirations from hypoglycemia", "Deep, rapid respirations as a compensatory mechanism", "Normal respiratory rate with decreased tidal volume"], answer: 2},
+  {q: "A 25-year-old woman with diabetes presents with polyuria, polydipsia, acetone breath, and orthostatic hypotension. Which pathophysiologic process most directly explains her hypotension?", options: ["Vasodilation caused by metabolic acidosis", "Decreased cardiac contractility due to ketones", "Osmotic diuresis leading to severe intravascular volume depletion", "Increased capillary permeability from hyperglycemia"], answer: 2},
+  {q: "A patient with type 1 diabetes develops DKA following a severe respiratory infection. Which hormonal change most contributed to the development of DKA?", options: ["Decreased cortisol and glucagon levels", "Increased insulin sensitivity in muscle tissue", "Increased stress hormones that promote hepatic glucose production", "Suppression of epinephrine release"], answer: 2},
+  {q: "Which of the following is the hallmark feature of Hyperglycemic Hyperosmolar Non-Ketotic Syndrome (HHNS)?", options: ["Severe dehydration and hyperosmolarity", "Ketoacidosis", "Hyperkalemia", "Severe ketosis"], answer: 0},
+  {q: "Which of the following statements are INCORRECT about Diabetic Ketoacidosis?", options: ["Extreme Hyperglycemia that presents with blood glucose > 600 mg/dL", "Ketones are present in the urine", "Metabolic acidosis is present with Kussmaul breathing", "Potassium levels should be at least 3.3 or higher during treatment of DKA with insulin therapy"], answer: 0},
+  {q: "Which of the following is not a sign or symptom of Diabetic Ketoacidosis?", options: ["Positive Ketones in the urine", "Oliguria", "Polydipsia", "Abdominal Pain"], answer: 1},
+  {q: "Patient is admitted with DKA. The physician orders intravenous fluids of 0.9% Normal Saline and 10 units of intravenous regular insulin bolus and then to start an insulin drip per protocol. The patient's labs are following: pH 7.25, Glucose 455, potassium 2.5. Which of the following is the most appropriate nursing intervention to perform next?", options: ["Start the IV fluids and administer the insulin bolus and drip as ordered", "Hold the insulin and notify the doctor of the potassium level of 2.5", "Hold IV fluids and administer insulin as ordered", "Recheck the glucose level"], answer: 1},
+  {q: "The main clinical features of DKA are the following EXCEPT:", options: ["Hyperglycemia", "Dehydration and electrolyte loss", "Acidosis", "Abdominal pain"], answer: 3},
+  {q: "Hyperosmolar Hyperglycemic State (HHS) is characterized by:", options: ["Presence of ketones", "Very high glucose without ketones", "Low glucose levels", "Severe acidosis"], answer: 1},
+  {q: "The most important initial treatment in HHS is:", options: ["Antibiotics", "Insulin bolus", "Fluid replacement", "Steroids"], answer: 2},
+  {q: "Hyperglycemic Hyperosmolar Nonketotic Syndrome would have all of the following signs and symptoms EXCEPT:", options: ["Dry mucous membranes", "Kussmaul breathing", "Blood glucose >600 mg/dL", "Polyuria"], answer: 1},
+  {q: "Which of the following statements are incorrect about hyperosmolar hyperglycemic nonketotic syndrome?", options: ["The blood glucose level is usually 600 to 1,200 mg/dl", "The osmolality exceeds 350 mosm/kg", "Presence of ketone body in the blood and urine", "pH is normal"], answer: 2},
+  {q: "The acidosis that occurs in DKA is reversed with:", options: ["Insulin", "Sodium bicarbonate", "Calcium gluconate", "Oral hypoglycemic drugs"], answer: 0},
+  {q: "In HHNS, the patient’s blood glucose level typically ranges from 600 to 1,200 mg/dL.", options: ["True", "False"], answer: 0},
+  {q: "Patients with HHNS usually have the ketosis related GI symptoms.", options: ["True", "False"], answer: 1}
+];
+
+let correctCount = 0;
+let wrongCount = 0;
+let answeredCount = 0;
+
+function switchPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    setTimeout(() => { if(!p.classList.contains('active')) p.style.display='none'; }, 600);
+  });
+  const target = document.getElementById(pageId);
+  target.style.display = 'block';
+  setTimeout(() => target.classList.add('active'), 50);
+  window.scrollTo(0,0);
+}
+
+function startJourney() {
+  correctCount = 0;
+  wrongCount = 0;
+  answeredCount = 0;
+  updateStats();
+  
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
+  document.getElementById('resultsBtn').style.display = 'none';
+  
+  allQuestions.forEach((q, index) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${index}`;
+    
+    let optionsHtml = '';
+    q.options.forEach((opt, optIndex) => {
+      optionsHtml += `<li class="option" onclick="checkAnswer(${index}, ${optIndex}, this)">${opt}</li>`;
+    });
+    
+    card.innerHTML = `
+      <span class="q-number">${index + 1}</span>
+      <span class="q-text">${q.q}</span>
+      <ul class="options-list">${optionsHtml}</ul>
+    `;
+    container.appendChild(card);
+  });
+  
+  switchPage('quizPage');
+}
+
+function checkAnswer(qIndex, selectedIndex, element) {
+  const card = document.getElementById(`q-${qIndex}`);
+  if(card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+  
+  const question = allQuestions[qIndex];
+  const options = card.querySelectorAll('.option');
+  
+  options.forEach(opt => opt.classList.add('disabled'));
+  
+  if(selectedIndex === question.answer) {
+    element.classList.add('correct');
+    card.classList.add('answered-correct');
+    correctCount++;
+    triggerCelebration();
+  } else {
+    element.classList.add('wrong');
+    options[question.answer].classList.add('correct');
+    card.classList.add('answered-wrong', 'shake');
+    setTimeout(() => card.classList.remove('shake'), 500);
+    wrongCount++;
+  }
+  
+  answeredCount++;
+  updateStats();
+  
+  if(answeredCount === allQuestions.length) {
+    document.getElementById('resultsBtn').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('resultsBtn').scrollIntoView({behavior: 'smooth', block: 'center'});
+    }, 300);
+  }
+}
+
+function updateStats() {
+  const remaining = allQuestions.length - answeredCount;
+  document.getElementById('statRemaining').textContent = remaining;
+  document.getElementById('statCorrect').textContent = correctCount;
+  document.getElementById('statWrong').textContent = wrongCount;
+}
+
+function triggerCelebration() {
+  const container = document.getElementById('celebration');
+  const symbols = ['🌸', '⭐', '🦋'];
+  
+  // إنشاء 6 أعمدة متساقطة بشكل منظم وأنيق جداً
+  for(let i=0; i<6; i++) {
+    const col = document.createElement('div');
+    col.className = 'celebration-column';
+    col.style.left = (i * 16.6) + '%';
+    col.style.animationDelay = (i * 0.1) + 's';
+    
+    for(let j=0; j<5; j++) {
+      const item = document.createElement('div');
+      item.className = 'celebration-item';
+      item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      item.style.animationDelay = (j * 0.3) + 's';
+      col.appendChild(item);
+    }
+    container.appendChild(col);
+  }
+  
+  setTimeout(() => { container.innerHTML = ''; }, 4500);
+}
+
+function showResults() {
+  const total = allQuestions.length;
+  const percent = Math.round((correctCount / total) * 100);
+  
+  document.getElementById('resTotal').textContent = total;
+  document.getElementById('resCorrect').textContent = correctCount;
+  document.getElementById('resWrong').textContent = wrongCount;
+  document.getElementById('resPercent').textContent = percent + '%';
+  document.getElementById('resultsScore').textContent = percent + '%';
+  document.getElementById('resultsCircle').style.setProperty('--p', percent + '%');
+  
+  let msg = "";
+  if(percent >= 90) {
+    msg = "أحسنت  ! أداء ممتاز،     .";
+  } else if(percent >= 70) {
+    msg = "مجهود رائع يا بطل! لكن يُفضل مراجعة المحاضرة لتثبيت المعلومة بشكل أفضل.";
+  } else {
+    msg = "لا بأس  ، . راجع المحاضرة جيداً وحاول مرة أخرى .";
+  }
+  document.getElementById('resultsMessage').textContent = msg;
+  
+  switchPage('resultsPage');
+}
+
+function resetQuiz() {
+  switchPage('welcomePage');
+}
+</script>
+</body>
+</html>
